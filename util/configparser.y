@@ -1055,6 +1055,9 @@ server_dns64_synthall: VAR_DNS64_SYNTHALL STRING_ARG
 stub_name: VAR_NAME STRING_ARG
 	{
 		OUTYY(("P(name:%s)\n", $2));
+		if(cfg_parser->cfg->stubs->name)
+			yyerror("stub name override, there must be one name "
+				"for one stub-zone");
 		free(cfg_parser->cfg->stubs->name);
 		cfg_parser->cfg->stubs->name = $2;
 	}
@@ -1086,6 +1089,9 @@ stub_prime: VAR_STUB_PRIME STRING_ARG
 forward_name: VAR_NAME STRING_ARG
 	{
 		OUTYY(("P(name:%s)\n", $2));
+		if(cfg_parser->cfg->forwards->name)
+			yyerror("forward name override, there must be one "
+				"name for one forward-zone");
 		free(cfg_parser->cfg->forwards->name);
 		cfg_parser->cfg->forwards->name = $2;
 	}
