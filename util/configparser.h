@@ -155,8 +155,9 @@
      VAR_HARDEN_BELOW_NXDOMAIN = 373,
      VAR_IGNORE_CD_FLAG = 374,
      VAR_LOG_QUERIES = 375,
-     VAR_DNS64_PREFIX = 376,
-     VAR_DNS64_SYNTHALL = 377
+     VAR_TCP_UPSTREAM = 376,
+     VAR_DNS64_PREFIX = 377,
+     VAR_DNS64_SYNTHALL = 378
    };
 #endif
 /* Tokens.  */
@@ -278,8 +279,9 @@
 #define VAR_HARDEN_BELOW_NXDOMAIN 373
 #define VAR_IGNORE_CD_FLAG 374
 #define VAR_LOG_QUERIES 375
-#define VAR_DNS64_PREFIX 376
-#define VAR_DNS64_SYNTHALL 377
+#define VAR_TCP_UPSTREAM 376
+#define VAR_DNS64_PREFIX 377
+#define VAR_DNS64_SYNTHALL 378
 
 
 
@@ -296,7 +298,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 300 "util/configparser.h"
+#line 302 "util/configparser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
