@@ -160,8 +160,12 @@
      VAR_SSL_SERVICE_KEY = 378,
      VAR_SSL_SERVICE_PEM = 379,
      VAR_SSL_PORT = 380,
-     VAR_DNS64_PREFIX = 381,
-     VAR_DNS64_SYNTHALL = 382
+     VAR_FORWARD_FIRST = 381,
+     VAR_STUB_FIRST = 382,
+     VAR_MINIMAL_RESPONSES = 383,
+     VAR_RRSET_ROUNDROBIN = 384,
+     VAR_DNS64_PREFIX = 385,
+     VAR_DNS64_SYNTHALL = 386
    };
 #endif
 /* Tokens.  */
@@ -288,8 +292,12 @@
 #define VAR_SSL_SERVICE_KEY 378
 #define VAR_SSL_SERVICE_PEM 379
 #define VAR_SSL_PORT 380
-#define VAR_DNS64_PREFIX 381
-#define VAR_DNS64_SYNTHALL 382
+#define VAR_FORWARD_FIRST 381
+#define VAR_STUB_FIRST 382
+#define VAR_MINIMAL_RESPONSES 383
+#define VAR_RRSET_ROUNDROBIN 384
+#define VAR_DNS64_PREFIX 385
+#define VAR_DNS64_SYNTHALL 386
 
 
 
@@ -306,7 +314,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 310 "util/configparser.h"
+#line 318 "util/configparser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
