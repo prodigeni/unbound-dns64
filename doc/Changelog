@@ -1,3 +1,88 @@
+18 January 2011: Wouter
+	- ldns 1.6.8 tarball included.
+
+17 January 2011: Wouter
+	- add get and set option for harden-below-nxdomain feature.
+	- iana portlist updated.
+
+14 January 2011: Wouter
+	- Fix so a changed NS RRset does not get moved name stuck on old
+	  server, for type NS the TTL is not increased.
+
+13 January 2011: Wouter
+	- Fix prefetch so it does not get stuck on old server for moved names.
+
+12 January 2011: Wouter
+	- iana portlist updated.
+
+11 January 2011: Wouter
+	- Fix insecure CNAME sequence marked as secure, reported by Bert
+	  Hubert.
+
+10 January 2011: Wouter
+	- faster lruhash get_mem routine.
+
+4 January 2011: Wouter
+	- bug#346: remove ITAR scripts from contrib, the service is discontinued, use the root.
+	- iana portlist updated.
+
+23 December 2010: Wouter
+	- Fix in infra cache that could cause rto larger than TOP_TIMEOUT kept.
+
+21 December 2010: Wouter
+	- algorithm compromise protection using the algorithms signalled in
+	  the DS record.  Also, trust anchors, DLV, and RFC5011 receive this,
+	  and thus, if you have multiple algorithms in your trust-anchor-file
+	  then it will now behave different than before.  Also, 5011 rollover
+	  for algorithms needs to be double-signature until the old algorithm
+	  is revoked.
+	  It is not an option, because I see no use to turn the security off.
+	- iana portlist updated.
+
+17 December 2010: Wouter
+	- squelch 'tcp connect: bla' in logfile, (set verbosity 2 to see them).
+	- fix validation in this case: CNAME to nodata for co-hosted opt-in
+	  NSEC3 insecure delegation, was bogus, fixed to be insecure.
+
+16 December 2010: Wouter
+	- Fix our 'BDS' license (typo reported by Xavier Belanger).
+
+10 December 2010: Wouter
+	- iana portlist updated.
+	- review changes for unbound-anchor.
+
+2 December 2010: Wouter
+	- feature typetransparent localzone, does not block other RR types.
+
+1 December 2010: Wouter
+	- Fix bug#338: print address when socket creation fails.
+
+30 November 2010: Wouter
+	- Fix storage of EDNS failures in the infra cache.
+	- iana portlist updated.
+
+18 November 2010: Wouter
+	- harden-below-nxdomain option, default off (because very old
+	  software may be incompatible).  We could enable it by default in
+	  the future.
+
+17 November 2010: Wouter
+	- implement draft-vixie-dnsext-resimprove-00, we stop on NXDOMAIN.
+	- make test output nicer.
+
+15 November 2010: Wouter
+	- silence 'tcp connect: broken pipe' and 'net down' at low verbosity.
+	- iana portlist updated.
+	- so-sndbuf option for very busy servers, a bit like so-rcvbuf.
+
+9 November 2010: Wouter
+	- unbound-anchor compiles with openssl 0.9.7.
+
+8 November 2010: Wouter
+	- release tag 1.4.7.
+	- trunk is version 1.4.8.
+	- Be lenient and accept imgw.pl malformed packet (like BIND).
+
 5 November 2010: Wouter
 	- do not synthesize a CNAME message from cache for qtype DS.
 
