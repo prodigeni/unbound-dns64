@@ -156,8 +156,12 @@
      VAR_IGNORE_CD_FLAG = 374,
      VAR_LOG_QUERIES = 375,
      VAR_TCP_UPSTREAM = 376,
-     VAR_DNS64_PREFIX = 377,
-     VAR_DNS64_SYNTHALL = 378
+     VAR_SSL_UPSTREAM = 377,
+     VAR_SSL_SERVICE_KEY = 378,
+     VAR_SSL_SERVICE_PEM = 379,
+     VAR_SSL_PORT = 380,
+     VAR_DNS64_PREFIX = 381,
+     VAR_DNS64_SYNTHALL = 382
    };
 #endif
 /* Tokens.  */
@@ -280,8 +284,12 @@
 #define VAR_IGNORE_CD_FLAG 374
 #define VAR_LOG_QUERIES 375
 #define VAR_TCP_UPSTREAM 376
-#define VAR_DNS64_PREFIX 377
-#define VAR_DNS64_SYNTHALL 378
+#define VAR_SSL_UPSTREAM 377
+#define VAR_SSL_SERVICE_KEY 378
+#define VAR_SSL_SERVICE_PEM 379
+#define VAR_SSL_PORT 380
+#define VAR_DNS64_PREFIX 381
+#define VAR_DNS64_SYNTHALL 382
 
 
 
@@ -298,7 +306,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 302 "util/configparser.h"
+#line 310 "util/configparser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

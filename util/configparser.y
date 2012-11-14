@@ -102,7 +102,8 @@ extern struct config_parser_state* cfg_parser;
 %token VAR_AUTO_TRUST_ANCHOR_FILE VAR_KEEP_MISSING VAR_ADD_HOLDDOWN 
 %token VAR_DEL_HOLDDOWN VAR_SO_RCVBUF VAR_EDNS_BUFFER_SIZE VAR_PREFETCH
 %token VAR_PREFETCH_KEY VAR_SO_SNDBUF VAR_HARDEN_BELOW_NXDOMAIN
-%token VAR_IGNORE_CD_FLAG VAR_LOG_QUERIES VAR_TCP_UPSTREAM
+%token VAR_IGNORE_CD_FLAG VAR_LOG_QUERIES VAR_TCP_UPSTREAM VAR_SSL_UPSTREAM
+%token VAR_SSL_SERVICE_KEY VAR_SSL_SERVICE_PEM VAR_SSL_PORT
 %token VAR_DNS64_PREFIX VAR_DNS64_SYNTHALL
 
 %%
@@ -158,7 +159,8 @@ content_server: server_num_threads | server_verbosity | server_port |
 	server_del_holddown | server_keep_missing | server_so_rcvbuf |
 	server_edns_buffer_size | server_prefetch | server_prefetch_key |
 	server_so_sndbuf | server_harden_below_nxdomain | server_ignore_cd_flag |
-	server_log_queries | server_tcp_upstream |
+	server_log_queries | server_tcp_upstream | server_ssl_upstream |
+	server_ssl_service_key | server_ssl_service_pem | server_ssl_port |
 	server_dns64_prefix | server_dns64_synthall
 	;
 stubstart: VAR_STUB_ZONE
@@ -373,6 +375,38 @@ server_tcp_upstream: VAR_TCP_UPSTREAM STRING_ARG
 		if(strcmp($2, "yes") != 0 && strcmp($2, "no") != 0)
 			yyerror("expected yes or no.");
 		else cfg_parser->cfg->tcp_upstream = (strcmp($2, "yes")==0);
+		free($2);
+	}
+	;
+server_ssl_upstream: VAR_SSL_UPSTREAM STRING_ARG
+	{
+		OUTYY(("P(server_ssl_upstream:%s)\n", $2));
+		if(strcmp($2, "yes") != 0 && strcmp($2, "no") != 0)
+			yyerror("expected yes or no.");
+		else cfg_parser->cfg->ssl_upstream = (strcmp($2, "yes")==0);
+		free($2);
+	}
+	;
+server_ssl_service_key: VAR_SSL_SERVICE_KEY STRING_ARG
+	{
+		OUTYY(("P(server_ssl_service_key:%s)\n", $2));
+		free(cfg_parser->cfg->ssl_service_key);
+		cfg_parser->cfg->ssl_service_key = $2;
+	}
+	;
+server_ssl_service_pem: VAR_SSL_SERVICE_PEM STRING_ARG
+	{
+		OUTYY(("P(server_ssl_service_pem:%s)\n", $2));
+		free(cfg_parser->cfg->ssl_service_pem);
+		cfg_parser->cfg->ssl_service_pem = $2;
+	}
+	;
+server_ssl_port: VAR_SSL_PORT STRING_ARG
+	{
+		OUTYY(("P(server_ssl_port:%s)\n", $2));
+		if(atoi($2) == 0)
+			yyerror("port number expected");
+		else cfg_parser->cfg->ssl_port = atoi($2);
 		free($2);
 	}
 	;
@@ -656,9 +690,8 @@ server_infra_host_ttl: VAR_INFRA_HOST_TTL STRING_ARG
 server_infra_lame_ttl: VAR_INFRA_LAME_TTL STRING_ARG
 	{
 		OUTYY(("P(server_infra_lame_ttl:%s)\n", $2));
-		if(atoi($2) == 0 && strcmp($2, "0") != 0)
-			yyerror("number expected");
-		else cfg_parser->cfg->lame_ttl = atoi($2);
+		verbose(VERB_DETAIL, "ignored infra-lame-ttl: %s (option "
+			"removed, use infra-host-ttl)", $2);
 		free($2);
 	}
 	;
@@ -674,9 +707,8 @@ server_infra_cache_numhosts: VAR_INFRA_CACHE_NUMHOSTS STRING_ARG
 server_infra_cache_lame_size: VAR_INFRA_CACHE_LAME_SIZE STRING_ARG
 	{
 		OUTYY(("P(server_infra_cache_lame_size:%s)\n", $2));
-		if(!cfg_parse_memsize($2, &cfg_parser->cfg->
-			infra_cache_lame_size))
-			yyerror("number expected");
+		verbose(VERB_DETAIL, "ignored infra-cache-lame-size: %s "
+			"(option removed, use infra-cache-numhosts)", $2);
 		free($2);
 	}
 	;
