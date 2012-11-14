@@ -102,6 +102,7 @@ extern struct config_parser_state* cfg_parser;
 %token VAR_AUTO_TRUST_ANCHOR_FILE VAR_KEEP_MISSING VAR_ADD_HOLDDOWN 
 %token VAR_DEL_HOLDDOWN VAR_SO_RCVBUF VAR_EDNS_BUFFER_SIZE VAR_PREFETCH
 %token VAR_PREFETCH_KEY
+%token VAR_DNS64_PREFIX VAR_DNS64_SYNTHALL
 
 %%
 toplevelvars: /* empty */ | toplevelvars toplevelvar ;
@@ -154,7 +155,8 @@ content_server: server_num_threads | server_verbosity | server_port |
 	server_val_sig_skew_max | server_cache_min_ttl | server_val_log_level |
 	server_auto_trust_anchor_file | server_add_holddown | 
 	server_del_holddown | server_keep_missing | server_so_rcvbuf |
-	server_edns_buffer_size | server_prefetch | server_prefetch_key
+	server_edns_buffer_size | server_prefetch | server_prefetch_key |
+	server_dns64_prefix | server_dns64_synthall
 	;
 stubstart: VAR_STUB_ZONE
 	{
@@ -1011,6 +1013,22 @@ server_local_data_ptr: VAR_LOCAL_DATA_PTR STRING_ARG
 		} else {
 			yyerror("local-data-ptr could not be reversed");
 		}
+	}
+	;
+server_dns64_prefix: VAR_DNS64_PREFIX STRING_ARG
+	{
+		OUTYY(("P(dns64_prefix:%s)\n", $2));
+		free(cfg_parser->cfg->dns64_prefix);
+		cfg_parser->cfg->dns64_prefix = $2;
+	}
+	;
+server_dns64_synthall: VAR_DNS64_SYNTHALL STRING_ARG
+	{
+		OUTYY(("P(server_dns64_synthall:%s)\n", $2));
+		if(strcmp($2, "yes") != 0 && strcmp($2, "no") != 0)
+			yyerror("expected yes or no.");
+		else cfg_parser->cfg->dns64_synthall = (strcmp($2, "yes")==0);
+		free($2);
 	}
 	;
 stub_name: VAR_NAME STRING_ARG

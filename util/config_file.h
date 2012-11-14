@@ -275,6 +275,12 @@ struct config_file {
 
 	/** daemonize, i.e. fork into the background. */
 	int do_daemonize;
+
+	/** DNS64 prefix */
+	char* dns64_prefix;
+
+	/** Synthetize all AAAA record despite the presence of an authoritative one */
+	int dns64_synthall;
 };
 
 /**
