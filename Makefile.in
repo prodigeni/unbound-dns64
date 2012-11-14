@@ -71,7 +71,8 @@ BUILD=build/
 
 WINDRES=@WINDRES@
 LINT=splint
-LINTFLAGS=+quiet -weak -warnposix -unrecog -Din_addr_t=uint32_t -Du_int=unsigned -Du_char=uint8_t -preproc -Drlimit=rlimit64 -D__gnuc_va_list=va_list -Dglob64=glob -Dglobfree64=globfree
+LINTFLAGS=+quiet -weak -warnposix -unrecog -Din_addr_t=uint32_t -Du_int=unsigned -Du_char=uint8_t -preproc -Drlimit=rlimit64 -D__gnuc_va_list=va_list
+#-Dglob64=glob -Dglobfree64=globfree
 # compat with openssl linux edition.
 LINTFLAGS+="-DBN_ULONG=unsigned long" -Dkrb5_int32=int "-Dkrb5_ui_4=unsigned int" -DPQ_64BIT=uint64_t -DRC4_INT=unsigned -fixedformalarray -D"ENGINE=unsigned" -D"RSA=unsigned" -D"DSA=unsigned" -D"EVP_PKEY=unsigned" -D"EVP_MD=unsigned" -D"SSL=unsigned" -D"SSL_CTX=unsigned" -D"X509=unsigned" -D"RC4_KEY=unsigned" -D"EVP_MD_CTX=unsigned"
 # compat with NetBSD
@@ -206,7 +207,7 @@ longcheck: longtest
 test:	unittest$(EXEEXT) testbound$(EXEEXT)
 	./unittest$(EXEEXT)
 	./testbound$(EXEEXT) -s
-	for x in testdata/*.rpl; do if ./testbound$(EXEEXT) -p $$x >/dev/null 2>&1; then echo $$x OK; else echo $$x failed; exit 1; fi done
+	for x in testdata/*.rpl; do echo -n "$$x "; if ./testbound$(EXEEXT) -p $$x >/dev/null 2>&1; then echo OK; else echo failed; exit 1; fi done
 	@echo test OK
 
 longtest:	tests
@@ -226,7 +227,22 @@ endif
 
 libunbound.la:	$(LIBUNBOUND_OBJ) $(ldnslib)
 	$(INFO) Link $@
+ifeq ($(CHECKLOCK_SRC),)
 	$Q$(LINK_LIB) -export-symbols $(srcdir)/libunbound/ubsyms.def -o $@ $(sort $(LIBUNBOUND_OBJ)) -rpath $(libdir) $(LIBS)
+else
+	cp $(srcdir)/libunbound/ubsyms.def $(BUILD)clubsyms.def
+	echo lock_protect >> $(BUILD)clubsyms.def
+	echo lock_unprotect >> $(BUILD)clubsyms.def
+	echo lock_get_mem >> $(BUILD)clubsyms.def
+	echo checklock_start >> $(BUILD)clubsyms.def
+	echo checklock_stop >> $(BUILD)clubsyms.def
+	echo checklock_lock >> $(BUILD)clubsyms.def
+	echo checklock_unlock >> $(BUILD)clubsyms.def
+	echo checklock_init >> $(BUILD)clubsyms.def
+	echo checklock_thrcreate >> $(BUILD)clubsyms.def
+	echo checklock_thrjoin >> $(BUILD)clubsyms.def
+	$Q$(LINK_LIB) -export-symbols $(BUILD)clubsyms.def -o $@ $(sort $(LIBUNBOUND_OBJ)) -rpath $(libdir) $(LIBS)
+endif
 
 unbound$(EXEEXT):	$(DAEMON_OBJ) $(ldnslib)
 	$(INFO) Link $@

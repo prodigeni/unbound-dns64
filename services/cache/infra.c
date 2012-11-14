@@ -275,7 +275,8 @@ infra_host(struct infra_cache* infra, struct sockaddr_storage* addr,
 			wr = 1;
 			/* TOP_TIMEOUT remains on reuse */
 			if(old >= USEFUL_SERVER_TOP_TIMEOUT)
-				((struct infra_host_data*)e->data)->rtt.rto=old;
+				((struct infra_host_data*)e->data)->rtt.rto
+					= USEFUL_SERVER_TOP_TIMEOUT;
 		}
 	}
 	if(!e) {
@@ -575,7 +576,8 @@ infra_edns_update(struct infra_cache* infra,
 	/* have an entry, update the rtt, and the ttl */
 	data = (struct infra_host_data*)e->data;
 	/* do not update if noEDNS and stored is yesEDNS */
-	if(!(edns_version == -1 && data->edns_version != -1)) {
+	if(!(edns_version == -1 && (data->edns_version != -1 &&
+		data->edns_lame_known))) {
 		data->edns_version = edns_version;
 		data->edns_lame_known = 1;
 	}
